@@ -1,0 +1,3 @@
+= Paperclip-dragonfly
+
+This project rocks and uses MIT-LICENSE.
