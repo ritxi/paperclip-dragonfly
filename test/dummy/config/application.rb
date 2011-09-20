@@ -2,9 +2,6 @@ require File.expand_path('../boot', __FILE__)
 
 require "active_model/railtie"
 require "active_record/railtie"
-require "action_controller/railtie"
-require "action_view/railtie"
-require "action_mailer/railtie"
 
 Bundler.require
 require "paperclip_dragonfly"
@@ -41,5 +38,9 @@ module Dummy
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+
+    config.paperclip_dragonfly.security_key = 'hello'
+    config.paperclip_dragonfly.protect_from_dos_attacks = true
+    config.paperclip_dragonfly.route_path = 'photos'
   end
 end

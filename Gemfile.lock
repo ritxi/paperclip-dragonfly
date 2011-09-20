@@ -39,6 +39,8 @@ GEM
       xpath (~> 0.1.4)
     childprocess (0.2.2)
       ffi (~> 1.0.6)
+    dragonfly (0.9.8)
+      rack
     erubis (2.6.6)
       abstract (>= 1.0.0)
     ffi (1.0.9)
@@ -93,5 +95,6 @@ PLATFORMS
 
 DEPENDENCIES
   capybara (>= 0.4.0)
+  dragonfly (= 0.9.8)
   rails (= 3.0.10)
   sqlite3
