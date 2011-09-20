@@ -1,4 +1,4 @@
-module PaperclipDragonfly
+module Dragonfly
   module DataStorage
     class FileDataStore
       include ::PaperclipDragonfly::StoringScope

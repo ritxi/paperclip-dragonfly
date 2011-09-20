@@ -1,5 +1,6 @@
 module PaperclipDragonfly
   module StoringScope
+    attr_reader :custom_scope
     module Tools
       def self.id_partition *options
         model_id = options.first
@@ -12,28 +13,24 @@ module PaperclipDragonfly
         file.gsub(/[^\w.]+/, '_')
       end
     end
-    
+
     def scope_for=(model_object)
       @model = model_object
       scoped_path = @model.class.respond_to?('df_scope') && @model.class.df_scope ? @model.class.df_scope : @model.class.table_name
       @custom_scope = scoped_path
     end
-    
-    def custom_scope
-      @custom_scope
-    end
-    
+
     def path
       raise "Path must be defined on the class where I'll be included to(File, S3, Mongo, etc)!!!!"
     end
-    
+
     # Generate path as id_partition or time_partition
     # depending on @model.partition_style method
     def generate_path(filename)
       path_style = @model.path_style
       filename = ::PaperclipDragonfly::StoringScope::Tools::filename_for(filename)
       uid = eval("::PaperclipDragonfly::StoringScope::Tools::#{path_style}(@model[:id])")
-      new_path =  ::File.join(custom_scope, uid, filename)
+      new_path = ::File.join(custom_scope, uid, filename)
       new_path
     end
   end

@@ -1,7 +1,7 @@
 require 'dragonfly'
 require 'rails'
 %w(active_model_extension data_storage model_extension rails version).each{|lib| require File.join %W(paperclip_dragonfly #{lib})}
-
+%w(fs s3).each{|lib| require File.join %W(paperclip_dragonfly data_storage #{lib})}
 module PaperclipDragonfly
   mattr_accessor :security_key
   @@security_key = 'wuaki'

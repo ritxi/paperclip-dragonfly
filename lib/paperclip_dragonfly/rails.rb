@@ -1,15 +1,8 @@
 require 'rails'
-require 'paperclip_dragonfly'
-
 module PaperclipDragonfly
   class Engine < ::Rails::Engine
     config.paperclip_dragonfly = PaperclipDragonfly
     
-    initializer 'dragonfly_rails.extend_dragonfly', :before => 'dragonfly_rails.active_record' do
-      datastore_type = (Rails.env.production? || Rails.env.staging?) ? 's3' : 'fs'
-      puts datastore_type
-      require File.expand_path("../data_storage/#{datastore_type}", __FILE__)
-    end
     initializer 'dragonfly_rails.active_record' do
       ::ActiveRecord::Base.send(:extend, ::PaperclipDragonfly::Dragonfly::ActiveModelExtensions::ClassMethods)
       ::ActiveRecord::Base.send(:include, ::PaperclipDragonfly::CustomPathExtension)
