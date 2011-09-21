@@ -2,12 +2,15 @@ require 'rails'
 module PaperclipDragonfly
   class Engine < ::Rails::Engine
     config.paperclip_dragonfly = PaperclipDragonfly
-    
-    initializer 'dragonfly_rails.active_record' do
+    initializer 'paperclip_dragonfly.load_datastorage_type' do
+      datastorage_type = ::Rails.configuration.paperclip_dragonfly.datastorage_type
+      %w(fs s3).include?(datastorage_type) and require File.join %W(paperclip_dragonfly data_storage #{datastorage_type}) or raise "Unknown datastorage type #{datastorage_type}"
+    end
+    initializer 'paperclip_dragonfly.active_record' do
       ::ActiveRecord::Base.send(:extend, ::PaperclipDragonfly::Dragonfly::ActiveModelExtensions::ClassMethods)
       ::ActiveRecord::Base.send(:include, ::PaperclipDragonfly::CustomPathExtension)
     end
-    initializer 'dragonfly_rails.load_extension', :after => 'dragonfly_rails.active_record' do
+    initializer 'paperclip_dragonfly.load_extension', :after => 'paperclip_dragonfly.active_record' do
       if ::Rails.configuration.paperclip_dragonfly.assets_path == :default
         ::Rails.configuration.paperclip_dragonfly.assets_path = Rails.root.join('public','assets')
       end
@@ -31,7 +34,7 @@ module PaperclipDragonfly
       end
       @app.define_macro(::ActiveRecord::Base, :image_accessor)
     end
-    initializer 'load asset dispatcher', :after => 'dragonfly_rails.load_extension' do |app|
+    initializer 'load asset dispatcher', :after => 'paperclip_dragonfly.load_extension' do |app|
       app.middleware.insert_after ::Rack::Lock, ::Dragonfly::Middleware, :images
     end
     # railtie code goes here
