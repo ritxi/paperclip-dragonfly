@@ -2,21 +2,26 @@ module PaperclipDragonfly
   module Dragonfly
     module ActiveModelExtensions
       module ClassMethods
+        def custom_path_style
+          @custom_path_style
+        end
+
         def dragonfly_for(*options)
-          
           accessor = options.first
           if options.size == 2
             options = options.last 
             set_df_scope(options[:scope]) if options[:scope]
+            @custom_path_style = options[:custom_path_style]
           end
           send :include, ::PaperclipDragonfly::CustomPathExtension
           df_rails_image_accessor accessor
           image_accessor accessor
         end
+
         def df_scope
           @scope ||= self.table_name
         end
-        
+
         # Dragonfly scope setter
         def set_df_scope(scope)
           @scope = scope
@@ -32,12 +37,7 @@ module Dragonfly
       private
       alias_method :original_save_dragonfly_attachments, :save_dragonfly_attachments
       def save_dragonfly_attachments
-        if path_style == :time_partition && new_record?
-          original_save_dragonfly_attachments
-        end
-        if path_style == :id_partition && !new_record?
-          original_save_dragonfly_attachments
-        end
+        original_save_dragonfly_attachments if (path_style == :time_partition && new_record?) || ([:custom, :id_partition].include?(path_style) && !new_record?)
       end
     end
     module ClassMethods

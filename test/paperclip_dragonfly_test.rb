@@ -28,7 +28,11 @@ class PaperclipDragonflyTest < ActiveSupport::TestCase
   test "Get id_partition path" do
     assert_equal('000/000/001', @tools::id_partition(1))
   end
-
+  test "Custom path style" do
+    #config.paperclip_dragonfly.path_style = ''
+    partition = @tools::generate_custom_style(':scope/:id/:inherited_size', {:scope => 'avatar', :id => 1, :inherited_size => 'original'})
+    assert_equal('avatar/1/original', partition)
+  end
   test "Get filename" do
     assert_equal('hello_my_world.jpg', @tools::filename_for('hello my world.jpg'))
   end
@@ -73,5 +77,13 @@ class PaperclipDragonflyTest < ActiveSupport::TestCase
     assert_equal(:id_partition, path_style)
     user.save
     assert_equal('images/000/000/001/Unknown.jpg', user.image_uid)
+  end
+
+  test "Get image uid(with custom path style)" do
+    params = { :custom_image => File.open(@file_path) }
+    user = CustomImage.new(params)
+    assert_equal(:custom, user.path_style)
+    assert(user.save)
+    assert_equal('custom_images/1/original/Unknown.jpg', user.custom_image_uid)
   end
 end

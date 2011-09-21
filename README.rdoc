@@ -2,10 +2,33 @@
 
 It's a rail engine that loads dragonfly gem adding scope and id_partion storing style. It let paperclip users to migrate to this solution when require more image size flexibility without loosing this file storing structure.
 
-Dragonfly store files using the current time, but for paperclip you can make Dragonfly to save files at /:dragonfly_scope/:id_partition
+Dragonfly store files using the current time, but for paperclip you can make Dragonfly to save files at :scope/:id_partition
 
   class User < ActiveRecord::Base
     dragonfly_for :avatar_file, :scope => 'avatars'
+  end
+
+Path style can be defined as follows
+
+*System defined path styles
+
+System defined available style's are: :id_partition or :time_partition 
+
+  class User < ActiveRecord::Base
+    dragonfly_for :avatar_file, :scope => 'avatars', :path_style => :id_partiton
+  end
+
+*Custom path style
+
+You can define your own custom path style's with the following variables
+
+** :scope
+** :id
+** :id_partition
+** :time_partition
+
+  class User < ActiveRecord::Base
+    dragonfly_for :avatar_file, :scope => 'avatars', :custom_path_style => ':scope/:id/original'
   end
 
 User avatar files will be stored as /avatars/000/000/001/filename_original.jpg
@@ -21,7 +44,6 @@ Image files will be stored as /images/000/000/001/filename_original.jpg
 
 === Rails Gemfile dependencies
 
-  gem 'dragonfly'
   gem 'paperclip_dragonfly', :git => 'https://github.com/ritxi/paperclip-dragonfly.git'
 
 === App configuration (config/application.rb)
@@ -29,7 +51,7 @@ Image files will be stored as /images/000/000/001/filename_original.jpg
   config.paperclip_dragonfly.security_key = 'mysecretkey'
   config.paperclip_dragonfly.protect_from_dos_attacks = true
   config.paperclip_dragonfly.route_path = 'media' # /media
-  
+
   # Default is Rails.root.join('public','assets'), this will only be used on local development environment, I expect production to use amazon and heroku
   config.paperclip_dragonfly.assets_path = 'local/path/where/assets/should/be/stored'
 
@@ -49,11 +71,11 @@ Image files will be stored as /images/000/000/001/filename_original.jpg
 
 ==== Prefere custom scope?
 
-  
+
   class User < ActiveRecord::Base
     dragonfly_for :avatar_file, :scope => 'avatars'
   end
-  
+
   # Add the following migration to your images migration file or add a new migration adding the avatar_file_uid field
   create_table "users", :force => true do |t|
     ...

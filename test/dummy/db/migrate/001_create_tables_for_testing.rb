@@ -11,10 +11,17 @@ class CreateTablesForTesting < ActiveRecord::Migration
       t.column "description", :text
       t.column "image_uid", :string
     end
+
+    create_table "custom_images", :force => true do |t|
+      t.column "title",  :text
+      t.column "description", :text
+      t.column "custom_image_uid", :string
+    end
   end
 
   def self.down
     drop_table :users
     drop_table :images
+    drop_table :custom_images
   end
 end
