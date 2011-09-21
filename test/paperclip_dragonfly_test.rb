@@ -27,6 +27,7 @@ class PaperclipDragonflyTest < ActiveSupport::TestCase
 
   test "Get id_partition path" do
     assert_equal('000/000/001', @tools::id_partition(1))
+    assert_equal('000/001/000', @tools::id_partition(1000))
   end
   test "Custom path style" do
     #config.paperclip_dragonfly.path_style = ''
