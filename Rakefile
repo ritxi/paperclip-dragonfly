@@ -4,7 +4,7 @@ require 'bundler'
 Bundler::GemHelper.install_tasks
 
 require 'rake'
-require 'rake/rdoctask'
+require 'rdoc/task'
 
 require 'rake/testtask'
 
