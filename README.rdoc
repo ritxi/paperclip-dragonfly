@@ -22,16 +22,16 @@ Image files will be stored as /images/000/000/001/filename_original.jpg
 === Rails Gemfile dependencies
 
   gem 'dragonfly'
-  gem 'paperclip-dragonfly', :require => 'dragonfly_rails', :git => 'https://github.com/ritxi/paperclip-dragonfly.git'
+  gem 'paperclip_dragonfly', :git => 'https://github.com/ritxi/paperclip-dragonfly.git'
 
 === App configuration (config/application.rb)
 
-  config.dragonfly_rails.security_key = 'mysecretkey'
-  config.dragonfly_rails.protect_from_dos_attacks = true
-  config.dragonfly_rails.route_path = 'media' # /media
+  config.paperclip_dragonfly.security_key = 'mysecretkey'
+  config.paperclip_dragonfly.protect_from_dos_attacks = true
+  config.paperclip_dragonfly.route_path = 'media' # /media
   
   # Default is Rails.root.join('public','assets'), this will only be used on local development environment, I expect production to use amazon and heroku
-  config.dragonfly_rails.assets_path = 'local/path/where/assets/should/be/stored'
+  config.paperclip_dragonfly.assets_path = 'local/path/where/assets/should/be/stored'
 
 === Model setup
 
