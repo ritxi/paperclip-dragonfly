@@ -16,4 +16,7 @@ module PaperclipDragonfly
 
   mattr_accessor :datastorage_type
   @@datastorage_type = 'fs'
+
+  mattr_accessor :custom_path_style
+  @@custom_path_style = nil
 end

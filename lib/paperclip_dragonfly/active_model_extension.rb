@@ -2,14 +2,16 @@ module PaperclipDragonfly
   module Dragonfly
     module ActiveModelExtensions
       module ClassMethods
+        mattr_accessor :replacement_regex
+
         def custom_path_style
-          @custom_path_style
+          @custom_path_style or ::Rails.configuration.paperclip_dragonfly.custom_path_style
         end
 
         def dragonfly_for(*options)
           accessor = options.first
           if options.size == 2
-            options = options.last 
+            options = options.last
             set_df_scope(options[:scope]) if options[:scope]
             @custom_path_style = options[:custom_path_style]
           end
