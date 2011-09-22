@@ -2,9 +2,13 @@ require 'rails'
 module PaperclipDragonfly
   class Engine < ::Rails::Engine
     config.paperclip_dragonfly = PaperclipDragonfly
-    initializer 'paperclip_dragonfly.load_datastorage_type' do
-      datastorage_type = ::Rails.configuration.paperclip_dragonfly.datastorage_type
-      %w(fs s3).include?(datastorage_type) and require File.join %W(paperclip_dragonfly data_storage #{datastorage_type}) or raise "Unknown datastorage type #{datastorage_type}"
+    initializer 'paperclip_dragonfly.load_datastorage_type' do |app|
+      datastorage_type = app.config.paperclip_dragonfly.datastorage_type
+      if %w(fs s3).include?(datastorage_type)
+        require File.join %W(paperclip_dragonfly data_storage #{datastorage_type})
+      else
+        raise "Unknown datastorage type #{datastorage_type}"
+      end
     end
     initializer 'paperclip_dragonfly.active_record' do
       ::ActiveRecord::Base.send(:extend, ::PaperclipDragonfly::Dragonfly::ActiveModelExtensions::ClassMethods)
